@@ -1,18 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState  } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules';
-import { X } from '@phosphor-icons/react';
+import { FacebookLogo, GooglePlayLogo, TwitterLogo, X, GoogleLogo } from '@phosphor-icons/react';
+import Swal from 'sweetalert2';
 
 const Element = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [isSwiperVisible, setIsSwiperVisible] = useState(false);
   const [swiperIndex, setSwiperIndex] = useState(0);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    message: '',
+    selectOption: '',
+    checkbox: false,
+  });
 
   const toggleShow = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form Data:', formData) & 
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "Your work has been saved",
+      showConfirmButton: false,
+      timer: 1500
+    });
   };
 
   const buttonStyle = (index) => ({
@@ -66,45 +96,156 @@ const Element = () => {
           <li className="text-[#333333] hover:text-[#66d0b6] cursor-pointer">Home</li> /
           <li className="text-[#333333] hover:text-[#66d0b6] cursor-pointer">Cart</li>
         </ul>
-        <div className="mt-14" style={{ maxWidth: '450px' }}>
-          <h1 className="text-2xl font-serif">Accordion</h1>
-          <br />
-          {sections.map((section, index) => (
-            <div key={index} className="mb-4">
-              <button
-                className="font-serif font-semibold uppercase transition-all duration-300 ease-in-out"
-                onClick={() => toggleShow(index)}
-                style={buttonStyle(index)}
+        <div className='flex gap-72 items-start'>
+          <div className="mt-14 max-w-sm">
+            <h1 className="text-2xl font-serif">Accordion</h1>
+            <br />
+            {sections.map((section, index) => (
+              <div key={index} className="mb-4">
+                <button
+                  className="font-serif font-semibold uppercase transition-all duration-300 ease-in-out"
+                  onClick={() => toggleShow(index)}
+                  style={buttonStyle(index)}
+                >
+                  {activeIndex === index ? `- ${section.title}` : `+ ${section.title}`}
+                </button>
+                {activeIndex === index && (
+                  <p className="text-[#5F5F5F] p-4 mt-2 delay-1000 transition-all">
+                    {section.content.split('\n').map((line, i) => (
+                      <React.Fragment key={i}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    ))}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="w-[560px] ">
+            <h1 className='font-serif text-2xl'>Form</h1>
+            <br />
+            <form onSubmit={handleSubmit}>
+              <input
+                className="border p-2 mb-2 w-full"
+                placeholder='First name'
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleInputChange}
+              />
+              <input
+                className="border p-2 mb-2 w-full"
+                placeholder='Last name'
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleInputChange}
+              />
+              <br />
+              <input
+                className="border p-2 mb-2 w-full"
+                type="email"
+                placeholder='Email address'
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+              />
+              <br />
+              <input
+                className="border p-2 mb-2 w-full"
+                type="password"
+                placeholder='Password'
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+              />
+              <br />
+              <textarea
+                className="border p-2 mb-2 w-full"
+                name="message"
+                cols="30"
+                rows="5"
+                placeholder='Message'
+                value={formData.message}
+                onChange={handleInputChange}
+              ></textarea>
+              <br />
+              <select
+                className="border p-2 mb-2 w-full"
+                name="selectOption"
+                value={formData.selectOption}
+                onChange={handleInputChange}
               >
-                {activeIndex === index ? `- ${section.title}` : `+ ${section.title}`}
-              </button>
-              {activeIndex === index && (
-                <p className="text-[#5F5F5F] p-4 mt-2 delay-1000 transition-all">
-                  {section.content.split('\n').map((line, i) => (
-                    <React.Fragment key={i}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))}
-                </p>
-              )}
+                <option value="" disabled>Select an option</option>
+                <option value="Colorlib">Colorlib</option>
+                <option value="Offers high quality free template">Offers high quality free template</option>
+              </select>
+              <br />
+              <div className="flex items-center mt-4 cursor-pointer">
+                <input
+                  type="checkbox"
+                  id="checkbox"
+                  name="checkbox"
+                  checked={formData.checkbox}
+                  onChange={handleInputChange}
+                  className="mr-2"
+                />
+                <label htmlFor="checkbox">Custom checkbox</label>
+              </div>
+              <button type="submit" className='uppercase bg-[#0fb78d] text-white py-2 px-4 mt-4'>Submit</button>
+            </form>
+            <h1 className='text-2xl font-serif mt-2'>Social Icons</h1>
+            <div className='flex gap-3 mt-3'>
+              <FacebookLogo size={32} className='hover:bg-[#A3D8FF] w-[45px] rounded-full cursor-pointer' />
+              <TwitterLogo size={32} className='hover:bg-[#A3D8FF] w-[45px] rounded-full cursor-pointer' />
+              <GoogleLogo size={32} className='hover:bg-[#A3D8FF] w-[45px] rounded-full cursor-pointer' />
+              <GooglePlayLogo size={32} className='hover:bg-[#A3D8FF] w-[45px] rounded-full cursor-pointer' />
             </div>
-          ))}
+          </div>
         </div>
-        <h1 className="text-2xl font-serif font-bold pt-4">Gallery</h1>
+        <h1 className="text-2xl font-serif font-bold mt-14">Gallery</h1>
         <br />
-        <div className="mt-5 w-full max-w-[700px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          {galleryImages.map((src, index) => (
-            <img
-              key={index}
-              src={src}
-              alt=""
-              className="w-full rounded-md hover:contrast-50 cursor-pointer"
-              onClick={() => handleImageClick(index)}
-            />
-          ))}
+        <div className='flex flex-wrap gap-10 items-center'>
+          <div className="mt-5 w-full max-w-[700px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            {galleryImages.map((src, index) => (
+              <img
+                key={index}
+                src={src}
+                alt=""
+                className="w-full rounded-md hover:contrast-50 cursor-pointer"
+                onClick={() => handleImageClick(index)}
+              />
+            ))}
+          </div>
+          <div className='w-[600px] mx-auto mb-5'>
+            <h1 className='font-serif text-2xl text-center mt-2'>Slider</h1>
+            <Swiper pagination={true} modules={[Pagination]} className="mySwiper">
+              <SwiperSlide className='text-center'>
+                <img src="https://preview.colorlib.com/theme/product/images/person_2.jpg" alt="" className='w-[80px] mt-2 rounded-full mx-auto' />
+                <br />
+                <h1>Adam Aderson</h1>
+                <br />
+                <p>“There live the blind texts. Separated they live in Bookmarksgrove<br />right at the coast of the Semantics, a large language ocean.”</p>
+              </SwiperSlide>
+              <SwiperSlide className='text-center'>
+                <img src="https://preview.colorlib.com/theme/product/images/person_3.jpg" alt="" className='w-[80px] mt-2 rounded-full mx-auto' />
+                <br />
+                <h1>Lukas Devlin</h1>
+                <br />
+                <p>“There live the blind texts. Separated they live in Bookmarksgrove<br /> right at the coast of the Semantics, a large language ocean.”</p>
+              </SwiperSlide>
+              <SwiperSlide className='text-center'>
+                <img src="https://preview.colorlib.com/theme/product/images/person_4.jpg" alt="" className='w-[80px] mt-2 rounded-full mx-auto' />
+                <br />
+                <h1>Kayla Bryant</h1>
+                <br />
+                <p>“There live the blind texts. Separated they live in Bookmarksgrove<br /> right at the coast of the Semantics, a large language ocean.”</p>
+              </SwiperSlide>
+            </Swiper>
+          </div>
         </div>
-        {isSwiperVisible ? (
+        {isSwiperVisible && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
             <div className="relative max-w-[90%] max-h-[90%]">
               <Swiper
@@ -124,14 +265,18 @@ const Element = () => {
                 ))}
               </Swiper>
               <button
-                onClick={() => setIsSwiperVisible(isSwiperVisible ? false : true)}
-                className="absolute cursor-pointer z-[9999]  top-2 right-2 px-4 py-2 bg-[#168DC8] text-white rounded-md"
+                onClick={() => setIsSwiperVisible(false)}
+                className="absolute cursor-pointer z-[9999] top-2 right-2 px-4 py-2 bg-[#168DC8] text-white rounded-md"
               >
                 <X size={32} />
               </button>
             </div>
           </div>
-        ) : null}
+        )}
+       <div>
+        <h1 className='font-serif text-2xl mt-10'>Video</h1>
+        <video ></video>
+       </div>
       </div>
     </section>
   );

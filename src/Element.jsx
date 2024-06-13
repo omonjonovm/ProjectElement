@@ -1,11 +1,12 @@
-import React, { useState  } from 'react';
+import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules';
-import { FacebookLogo, GooglePlayLogo, TwitterLogo, X, GoogleLogo } from '@phosphor-icons/react';
+import { FacebookLogo, GooglePlayLogo, TwitterLogo, X, GoogleLogo, Check } from '@phosphor-icons/react';
 import Swal from 'sweetalert2';
+import video from "../src/video.mp4";
 
 const Element = () => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -35,7 +36,7 @@ const Element = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Data:', formData) & 
+    console.log('Form Data:', formData);
     Swal.fire({
       position: "top-end",
       icon: "success",
@@ -96,8 +97,8 @@ const Element = () => {
           <li className="text-[#333333] hover:text-[#66d0b6] cursor-pointer">Home</li> /
           <li className="text-[#333333] hover:text-[#66d0b6] cursor-pointer">Cart</li>
         </ul>
-        <div className='flex gap-72 items-start'>
-          <div className="mt-14 max-w-sm">
+        <div className='flex flex-col lg:flex-row gap-8 items-start'>
+          <div className="max-w-sm lg:mr-12">
             <h1 className="text-2xl font-serif">Accordion</h1>
             <br />
             {sections.map((section, index) => (
@@ -122,10 +123,10 @@ const Element = () => {
               </div>
             ))}
           </div>
-          <div className="w-[560px] ">
+          <div className="w-full lg:w-[560px] ">
             <h1 className='font-serif text-2xl'>Form</h1>
             <br />
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 className="border p-2 mb-2 w-full"
                 placeholder='First name'
@@ -193,9 +194,9 @@ const Element = () => {
                 />
                 <label htmlFor="checkbox">Custom checkbox</label>
               </div>
-              <button type="submit" className='uppercase bg-[#0fb78d] text-white py-2 px-4 mt-4'>Submit</button>
+              <button type="submit" className='uppercase bg-[#0fb78d] text-white py-2 px-4 mt-4 w-full lg:w-auto'>Submit</button>
             </form>
-            <h1 className='text-2xl font-serif mt-2'>Social Icons</h1>
+            <h1 className='text-2xl font-serif mt-4 lg:mt-0'>Social Icons</h1>
             <div className='flex gap-3 mt-3'>
               <FacebookLogo size={32} className='hover:bg-[#A3D8FF] w-[45px] rounded-full cursor-pointer' />
               <TwitterLogo size={32} className='hover:bg-[#A3D8FF] w-[45px] rounded-full cursor-pointer' />
@@ -218,7 +219,7 @@ const Element = () => {
               />
             ))}
           </div>
-          <div className='w-[600px] mx-auto mb-5'>
+          <div className='w-full lg:w-[600px] mx-auto mb-5 mt-5 lg:mt-0'>
             <h1 className='font-serif text-2xl text-center mt-2'>Slider</h1>
             <Swiper pagination={true} modules={[Pagination]} className="mySwiper">
               <SwiperSlide className='text-center'>
@@ -273,10 +274,20 @@ const Element = () => {
             </div>
           </div>
         )}
-       <div>
-        <h1 className='font-serif text-2xl mt-10'>Video</h1>
-        <video ></video>
-       </div>
+        <div className='flex flex-col lg:flex-row items-start lg:items-center gap-8 mt-10'>
+          <div className='lg:w-[50%]'>
+            <h1 className='font-serif text-2xl mt-2'>Video</h1>
+            <div className="video-wrapper mt-4">
+              <video src={video} controls className="w-full max-w-[700px]  rounded-md"></video>
+            </div>
+          </div>
+          <div className='lg:w-[50%]'>
+            <h1 className='text-2xl font-serif'>Check Unordered List</h1><br />
+            <p className='flex items-center gap-3'><Check size={32} />Far far away, behind the word</p>
+            <p className='flex items-center gap-3'><Check size={32} />Far from the countries Vokalia</p>
+            <p className='flex items-center gap-3'><Check size={32} /> Separated they live in Bookmarksgrove</p>
+          </div>
+        </div>
       </div>
     </section>
   );
